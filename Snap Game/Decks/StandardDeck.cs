@@ -1,6 +1,7 @@
 ﻿namespace SnapGame.Decks
 {
     using SnapGame.Cards;
+    using SnapGame.Players;
     using System;
     using System.Collections.Generic;
     public class StandardDeck : IDeck
@@ -14,8 +15,6 @@
         public StandardDeck()
         {
             Cards = new List<Card>();
-            FillDeck();
-            Shuffle();
         }
 
         public void FillDeck()
@@ -45,6 +44,28 @@
                     Cards[k] = temp;
                 }
             }
+        }
+
+        public void DealCards(List<Player> players)
+        {
+            while (Cards.Count > 0)
+            { 
+                foreach(var player in players)
+                {
+                    if (Cards.Count > 0)
+                    {    
+                        player.FaceDownCards.Add(TakeTopCard());
+                    }
+                }
+            }
+        }
+
+        public Card TakeTopCard()
+        {
+            // Find the top card, remove it and return it
+            var topCard = Cards[this.Cards.Count - 1];
+            Cards.Remove(topCard);
+            return topCard;
         }
     }
 }

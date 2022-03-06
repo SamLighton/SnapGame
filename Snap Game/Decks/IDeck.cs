@@ -1,6 +1,7 @@
 ﻿namespace SnapGame.Decks
 {
     using SnapGame.Cards;
+    using SnapGame.Players;
     using System.Collections.Generic;
     public interface IDeck
     {

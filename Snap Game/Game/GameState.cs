@@ -2,6 +2,7 @@
 {
     public enum GameState
     {
+        EnterPlayerAmount,
         Start,
         InProgress,
         Finish

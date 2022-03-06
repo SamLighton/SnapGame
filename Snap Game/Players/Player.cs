@@ -8,15 +8,20 @@ namespace SnapGame.Players
         public int PlayerNumber { get; }
         public string Name { get; }
 
-        public List<Card> FaceDownCards;
-        public List<Card> FaceUpCards;
+        public List<Card> FaceDownCards { get; }
+        public List<Card> FaceUpCards { get; }
         
-
+        public Player(int playerNumber)
+        {
+            PlayerNumber = playerNumber;
+            FaceDownCards = new List<Card>();
+            FaceUpCards = new List<Card>();
+        }
 
         public Player(int playerNumber, string name)
         {
-            this.PlayerNumber = playerNumber;
-            this.Name = name;
+            PlayerNumber = playerNumber;
+            Name = name;
         }
     }
 }

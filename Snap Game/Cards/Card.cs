@@ -7,8 +7,8 @@
 
         public Card(CardValue value, CardSuit suit)
         {
-            this.Value = value;
-            this.Suit = suit;
+            Value = value;
+            Suit = suit;
         }
     }
 }
