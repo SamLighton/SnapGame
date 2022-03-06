@@ -53,7 +53,7 @@
                 {
                     players.Add(new Player(i));
                 }
-                Console.WriteLine("Number of players registered as " + players.Count);
+                Console.WriteLine($"Number of players registered as + { players.Count}");
                 game.GameState = GameState.Start;
             }
 
@@ -74,8 +74,73 @@
                 game.GameState = GameState.InProgress;
             }
 
-            if (game.GameState == GameState.InProgress)
+            while (game.GameState == GameState.InProgress)
             {
+                foreach(var player in players)
+                {
+                    player.DrawCard();
+
+                    var drawnCard = player.FaceUpCards[player.FaceUpCards.Count - 1];
+
+                    Console.WriteLine($"Player {player.PlayerNumber} drew card {drawnCard.Value} of {drawnCard.Suit}");
+
+
+                    // wait for Console.ReadLine
+                    // if press 1, snap check for player 1
+                    // if press 2, snap check for player 2
+                    // if press spacebar, go to next turn
+
+                    do
+                    {
+                        Console.WriteLine("Enter 1 or 2 to call Snap or press Spacebar to pass to the next turn");
+                    }
+                    while (Console.ReadKey().Key != ConsoleKey.D1 && Console.ReadKey().Key != ConsoleKey.D2 && Console.ReadKey().Key != ConsoleKey.Spacebar);
+
+                    if (Console.ReadKey().Key == ConsoleKey.D1)
+                    {
+                        Console.WriteLine("Checking for snap player 1");
+                        // checkForSnap();
+
+                        if (CheckForSnap(players))
+                        {
+                            HandleSnap(players[0]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No Snap");
+                        }
+
+                        continue;
+                    }
+                    if (Console.ReadKey().Key == ConsoleKey.D2)
+                    {
+                        Console.WriteLine("Checking for snap player 2");
+                        // checkForSnap();
+
+                        if (CheckForSnap(players))
+                        {
+                            HandleSnap(players[1]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No Snap");
+                        }
+
+                        continue;
+                    }
+                    if (Console.ReadKey().Key == ConsoleKey.Spacebar)
+                    {
+                        // go to next turn
+                        continue;
+                    }
+
+                    if (CheckForWinner(players))
+                    {
+                        game.GameState = GameState.Finish;
+                    }
+
+                }
+
                 // set player turn
                 // flip that player's top card from the face down pile and move it into the face up pile
                 // wait 5 seconds for anyone to press their 123456 key for Snap
@@ -84,10 +149,6 @@
                 // If not snap, ?
 
                 // Check for winner post successful snap
-                if (CheckForWinner(players))
-                {
-                    game.GameState = GameState.Finish;
-                }
             }
 
             if (game.GameState == GameState.Finish)
@@ -97,7 +158,34 @@
             }
 
         }
-        
+
+        public static bool CheckForSnap(List<Player> players)
+        {
+            var topCardCollection = new List<Card>();
+
+            foreach (var player in players)
+            {
+                topCardCollection.Add(player.FaceUpCards[player.FaceUpCards.Count - 1]);
+            }
+
+            if (topCardCollection = 1)
+            {
+                Console.WriteLine("Snap!");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public static bool HandleSnap(Player callingPlayer)
+        {
+            // callingPlayer.FaceUp
+            return true;
+        }
+
         public static bool CheckForWinner(List<Player> players)
         {
             foreach(var player in players)

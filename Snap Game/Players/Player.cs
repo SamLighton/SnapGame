@@ -23,5 +23,14 @@ namespace SnapGame.Players
             PlayerNumber = playerNumber;
             Name = name;
         }
+
+        public void DrawCard()
+        {
+            int topCardIndex = FaceDownCards.Count - 1;
+
+            FaceUpCards.Add(FaceDownCards[topCardIndex]);
+
+            FaceDownCards.RemoveAt(topCardIndex);
+        }
     }
 }
