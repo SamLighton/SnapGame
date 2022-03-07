@@ -72,61 +72,51 @@
 
                     var drawnCard = player.FaceUpCards[player.FaceUpCards.Count - 1];
 
-                    Console.WriteLine($"Player {player.PlayerNumber} drew card {drawnCard.Value} of {drawnCard.Suit}");
+                    Console.WriteLine($"Player {player.PlayerNumber} drew card {drawnCard.Value} of {drawnCard.Suit} - Press 1 or 2 for Snap and Spacebar to pass");
 
-
-                    // wait for Console.ReadLine
-                    // if press 1, snap check for player 1
-                    // if press 2, snap check for player 2
-                    // if press spacebar, go to next turn
+                    var cki = Console.ReadKey();
 
                     do
                     {
-                        Console.WriteLine("Enter 1 or 2 to call Snap or press Spacebar to pass to the next turn");
-                    }
-                    while (Console.ReadKey().Key != ConsoleKey.D1 && Console.ReadKey().Key != ConsoleKey.D2 && Console.ReadKey().Key != ConsoleKey.Spacebar);
 
-                    // Change to case statement for players 1-8 - Haven't figured out a of a way to handle this regardless of player number yet
+                        // Change to case statement for players 1-8 - Haven't figured out a of a way to handle this regardless of player number yet
 
-                    if (Console.ReadKey().Key == ConsoleKey.D1)
-                    {
-                        Console.WriteLine("Checking for snap player 1");
-                        // checkForSnap();
+                        switch (cki.Key)
+                        {
+                            case ConsoleKey.D1:
+                                Console.WriteLine("Checking for snap player 1");
 
-                        if (CheckForSnap(players))
-                        {
-                            HandleSnap(players[0]);
-                        }
-                        else
-                        {
-                            Console.WriteLine("No Snap");
-                        }
-                    }
-                    if (Console.ReadKey().Key == ConsoleKey.D2)
-                    {
-                        Console.WriteLine("Checking for snap player 2");
-                        // checkForSnap();
+                                if (CheckForSnap(players))
+                                {
+                                    HandleSnap(players[0]);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No Snap");
+                                }
+                                break;
+                            case ConsoleKey.D2:
+                                Console.WriteLine("Checking for snap player 2");
 
-                        if (CheckForSnap(players))
-                        {
-                            HandleSnap(players[1]);
+                                if (CheckForSnap(players))
+                                {
+                                    HandleSnap(players[1]);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No Snap");
+                                }
+                                break;
+                            case ConsoleKey.Spacebar:
+                                Console.WriteLine("\nMoving to next turn\n");
+                                // go to next turn
+                                break;
+                            default:
+                                Console.WriteLine("\nInvalid key entry");
+                                break;
                         }
-                        else
-                        {
-                            Console.WriteLine("No Snap");
-                        }
                     }
-                    if (Console.ReadKey().Key == ConsoleKey.Spacebar)
-                    {
-                        Console.WriteLine("Moving to next turn");
-                        // go to next turn
-                    }
-                    
-                    if (CheckForWinner(players))
-                    {
-                        game.GameState = GameState.Finish;
-                    }
-                    
+                    while (cki.Key != ConsoleKey.D1 && cki.Key != ConsoleKey.D2 && cki.Key != ConsoleKey.Spacebar);
                 }
 
                 // set player turn
