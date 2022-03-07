@@ -6,14 +6,13 @@
     using SnapGame.Players;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     class Program
     {
         static void Main(string[] args)
         {
             var card = new Card(CardValue.Two, CardSuit.Spades);
-
-            var player1 = new Player(1, "Sam");
 
             var deck = new StandardDeck();
 
@@ -23,18 +22,9 @@
 
             string winningPlayerName;
 
-
             Console.WriteLine($"{card.Value} of {card.Suit}");
 
-            Console.WriteLine($"Player {player1.PlayerNumber} is called {player1.Name}");
-
             Console.WriteLine(deck.Cards.Count);
-
-            // Console.WriteLine($"First card - {deck.Cards[0].Value} of {deck.Cards[0].Suit}");
-
-            // Console.WriteLine($"Top card - {deck.Cards[51].Value} of {deck.Cards[51].Suit}");
-
-
 
             if (game.GameState == GameState.EnterPlayerAmount)
             {
@@ -96,6 +86,8 @@
                     }
                     while (Console.ReadKey().Key != ConsoleKey.D1 && Console.ReadKey().Key != ConsoleKey.D2 && Console.ReadKey().Key != ConsoleKey.Spacebar);
 
+                    // Change to case statement for players 1-8 - Haven't figured out a of a way to handle this regardless of player number yet
+
                     if (Console.ReadKey().Key == ConsoleKey.D1)
                     {
                         Console.WriteLine("Checking for snap player 1");
@@ -109,8 +101,6 @@
                         {
                             Console.WriteLine("No Snap");
                         }
-
-                        continue;
                     }
                     if (Console.ReadKey().Key == ConsoleKey.D2)
                     {
@@ -125,25 +115,23 @@
                         {
                             Console.WriteLine("No Snap");
                         }
-
-                        continue;
                     }
                     if (Console.ReadKey().Key == ConsoleKey.Spacebar)
                     {
+                        Console.WriteLine("Moving to next turn");
                         // go to next turn
-                        continue;
                     }
-
+                    
                     if (CheckForWinner(players))
                     {
                         game.GameState = GameState.Finish;
                     }
-
+                    
                 }
 
                 // set player turn
                 // flip that player's top card from the face down pile and move it into the face up pile
-                // wait 5 seconds for anyone to press their 123456 key for Snap
+                // wait 5 seconds for anyone to press their 12345678 key for Snap
 
                 // If snap, give the person who snapped all the cards from the player's face up pile who the card snapped against, plus their own, and place these at the bottom of the facedown pile
                 // If not snap, ?
@@ -153,10 +141,15 @@
 
             if (game.GameState == GameState.Finish)
             {
-                // declare winner
+                foreach (var player in players)
+                {
+                    if (player.FaceDownCards.Count == deck.Cards.Count)
+                    {
+                        Console.WriteLine($"Player {player.PlayerNumber} wins!");
+                    }
+                }
                 // reset game state to the beginning
             }
-
         }
 
         public static bool CheckForSnap(List<Player> players)
@@ -165,10 +158,22 @@
 
             foreach (var player in players)
             {
-                topCardCollection.Add(player.FaceUpCards[player.FaceUpCards.Count - 1]);
+                if (player.FaceUpCards.Count > 0)
+                {
+                    topCardCollection.Add(player.FaceUpCards[player.FaceUpCards.Count - 1]);
+                }
             }
 
-            if (topCardCollection = 1)
+            // Go through the topCardCollection list and check for any of the same card values across any two in the list
+
+            var duplicateCardList = topCardCollection.GroupBy(x => x.Value)
+                    .Where(g => g.Count() > 1)
+                    .Select(y => y.Key)
+                    .ToList();
+
+            Console.WriteLine($"duplicateCardList.Count = {duplicateCardList.Count}");
+
+            if (duplicateCardList.Count > 0)
             {
                 Console.WriteLine("Snap!");
                 return true;
@@ -177,7 +182,6 @@
             {
                 return false;
             }
-
         }
 
         public static bool HandleSnap(Player callingPlayer)
